@@ -29,7 +29,7 @@ namespace lab4
                 return horsePower.CompareTo(engine.horsePower);
         }
 
-        public string EngineInfo()
+        public override string ToString()
         {
             return this.model + "/" + this.horsePower.ToString() + "/" + this.displacement.ToString();
         }

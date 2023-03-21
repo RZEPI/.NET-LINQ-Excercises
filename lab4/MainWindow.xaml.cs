@@ -42,20 +42,17 @@ namespace lab4
 
             MakeQueries(myCars);
             myCars.Sort(new Comparison<Car>(arg1));
+            foreach (var car in myCars)
+                Console.WriteLine(car.ToString());
             myCars.FindAll(arg2).ForEach(arg3);
         }
 
         private void MakeQueries(List<Car> list)
         {
-            var a6QueryES = from car in list
-                            where car.model == "A6"
-                            select new
-                            {
-                                engineType = car.motor.model == "TDI" ? "diesel" : "petrol",
-                                hppl = car.motor.horsePower / car.motor.displacement
-                            };
-            var engineQueryES = from engine in a6QueryES
-                                group engine.hppl by engine.engineType into engineGroup
+            IEnumerable<dynamic> engineQueryES = from car in list
+                                where car.model == "A6"
+                                let engineType = car.motor.model == "TDI" ? "diesel" : "petrol"
+                                group car.motor.horsePower / car.motor.displacement by engineType into engineGroup
                                 orderby engineGroup.Average() descending
                                 select new
                                 {
@@ -65,13 +62,12 @@ namespace lab4
             foreach (var e in engineQueryES)
                 Console.WriteLine(e.engineType + ": " + e.avgHPPL);
 
-            var a6QueryMB = list.Where(car => car.model == "A6")
+            IEnumerable<dynamic> engineQueryMB = list.Where(car => car.model == "A6")
                                 .Select(car => new
                                 {
                                     engineType = car.motor.model == "TDI" ? "diesel" : "petrol",
                                     hppl = car.motor.horsePower / car.motor.displacement
-                                });
-            var engineQueryMB = a6QueryMB.GroupBy(engine => engine.engineType)
+                                }).GroupBy(engine => engine.engineType)
                                      .Select(engineGroup => new
                                      {
                                          engineType = engineGroup.Key,
@@ -101,7 +97,7 @@ namespace lab4
         };
         Action<Car> arg3 = delegate (Car car)
         {
-            MessageBox.Show(car.CarInfo());
+            MessageBox.Show(car.ToString());
         };
     }
 

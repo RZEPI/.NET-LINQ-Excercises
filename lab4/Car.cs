@@ -18,9 +18,9 @@ namespace lab4
             this.year = year;
         }
 
-        public string CarInfo()
+        public override string ToString()
         {
-            return "Model: " + this.model + "\nEngine: " + this.motor.EngineInfo() + "\nYear: " + this.year;
+            return "Model: " + this.model + "\nEngine: " + this.motor.ToString() + "\nYear: " + this.year;
         }
     }
     
